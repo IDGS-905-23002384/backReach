@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mayra\\Desktop\\DARIO 10\\reach\\reachBack\\reachBack\\reachBack.csproj": {}
+    "C:\\Users\\mayra\\Desktop\\DARIO 10\\reachBack\\reachBack\\reachBack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mayra\\Desktop\\DARIO 10\\reach\\reachBack\\reachBack\\reachBack.csproj": {
+    "C:\\Users\\mayra\\Desktop\\DARIO 10\\reachBack\\reachBack\\reachBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reach\\reachBack\\reachBack\\reachBack.csproj",
+        "projectUniqueName": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reachBack\\reachBack\\reachBack.csproj",
         "projectName": "reachBack",
-        "projectPath": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reach\\reachBack\\reachBack\\reachBack.csproj",
+        "projectPath": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reachBack\\reachBack\\reachBack.csproj",
         "packagesPath": "C:\\Users\\mayra\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reach\\reachBack\\reachBack\\obj\\",
+        "outputPath": "C:\\Users\\mayra\\Desktop\\DARIO 10\\reachBack\\reachBack\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -58,23 +58,23 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
             }
           },
           "imports": [

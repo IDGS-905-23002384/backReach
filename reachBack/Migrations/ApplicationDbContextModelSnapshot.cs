@@ -17,7 +17,7 @@ namespace reachBack.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -59,10 +59,6 @@ namespace reachBack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -70,6 +66,18 @@ namespace reachBack.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Gráficas"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "Procesadores"
+                        });
                 });
 
             modelBuilder.Entity("reachBack.Models.FichaTecnica", b =>
@@ -172,12 +180,25 @@ namespace reachBack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Estado")
+                    b.Property<decimal>("CostoManoObra")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("EstadoArmado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EstadoEnvio")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Iva")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
@@ -236,7 +257,14 @@ namespace reachBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("Envio")
+                        .HasColumnType("bit");
+
                     b.Property<string>("EspecificacionesTecnicas")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -251,8 +279,15 @@ namespace reachBack.Migrations
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal?>("PrecioAnterior")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -271,6 +306,25 @@ namespace reachBack.Migrations
                     b.HasIndex("ProveedorId");
 
                     b.ToTable("Productos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoriaId = 1,
+                            Descripcion = "Dual OC - 12 GB GDDR6X",
+                            Envio = true,
+                            EspecificacionesTecnicas = "12 GB GDDR6X, PCI Express 4.0",
+                            ImagenUrl = "https://images.unsplash.com/photo-1587202372775-e229f172b9d7",
+                            Marca = "ASUS",
+                            Nombre = "RTX 4070 SUPER",
+                            Precio = 13899.00m,
+                            PrecioAnterior = 15499.00m,
+                            Sku = "RTX4070-SUP",
+                            Stock = 8,
+                            StockMinimo = 5,
+                            TipoInventario = "Almacen"
+                        });
                 });
 
             modelBuilder.Entity("reachBack.Models.Proveedor", b =>
