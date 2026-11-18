@@ -1,100 +1,64 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using reachBack.Data;
+using reachBack.Dtos;
+using reachBack.Infrastructure;
 using reachBack.Models;
+using reachBack.Services;
 
-namespace reachBack.Controllers
+namespace reachBack.Controllers;
+
+[ApiController]
+[Route("api/productos")]
+public class ProductosController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductosController : ControllerBase
+    private readonly ProductoService _productos;
+
+    public ProductosController(ProductoService productos)
     {
-        private readonly ApplicationDbContext _context;
+        _productos = productos;
+    }
 
-        public ProductosController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    private bool EsPersonal => User.IsInRole(Roles.Empleado) || User.IsInRole(Roles.Administrador);
 
-        // GET: api/Productos
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProductos()
-        {
-            return await _context.Productos
-                .Include(p => p.Categoria)
-                .ToListAsync();
-        }
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult<PaginaDto<ProductoListaDto>>> Listar([FromQuery] ProductoFiltroDto filtro) =>
+        Ok(await _productos.ListarAsync(filtro, EsPersonal));
 
-        // GET: api/Productos/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> GetProducto(int id)
-        {
-            var producto = await _context.Productos
-                .Include(p => p.Categoria)
-                .FirstOrDefaultAsync(p => p.Id == id);
+    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ProductoDetalleDto>> Obtener(int id) => Ok(await _productos.ObtenerAsync(id, EsPersonal));
 
-            if (producto == null)
-            {
-                return NotFound();
-            }
+    [HttpGet("marcas")]
+    [AllowAnonymous]
+    public async Task<ActionResult<List<string>>> Marcas([FromQuery] int? categoriaId) => Ok(await _productos.MarcasAsync(categoriaId));
 
-            return producto;
-        }
+    [HttpPost]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<ActionResult<ProductoDetalleDto>> Crear(ProductoGuardarDto dto)
+    {
+        var creado = await _productos.CrearAsync(dto, User.Email());
+        return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
+    }
 
-        // POST: api/Productos
-        [HttpPost]
-        public async Task<ActionResult<Producto>> PostProducto(Producto producto)
-        {
-            _context.Productos.Add(producto);
-            await _context.SaveChangesAsync();
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<ActionResult<ProductoDetalleDto>> Actualizar(int id, ProductoGuardarDto dto) =>
+        Ok(await _productos.ActualizarAsync(id, dto, User.Email()));
 
-            return CreatedAtAction(nameof(GetProducto), new { id = producto.Id }, producto);
-        }
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<IActionResult> Desactivar(int id)
+    {
+        await _productos.CambiarEstadoAsync(id, false);
+        return NoContent();
+    }
 
-        // PUT: api/Productos/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProducto(int id, Producto producto)
-        {
-            if (id != producto.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(producto).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Productos.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Productos/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducto(int id)
-        {
-            var producto = await _context.Productos.FindAsync(id);
-            if (producto == null)
-            {
-                return NotFound();
-            }
-
-            _context.Productos.Remove(producto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+    [HttpPatch("{id:int}/activar")]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<IActionResult> Activar(int id)
+    {
+        await _productos.CambiarEstadoAsync(id, true);
+        return NoContent();
     }
 }

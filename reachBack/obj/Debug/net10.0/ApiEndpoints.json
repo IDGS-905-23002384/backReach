@@ -1,15 +1,15 @@
 [
   {
-    "ContainingType": "reachBack.Controllers.CategoriasController",
-    "Method": "GetCategorias",
-    "RelativePath": "api/Categorias",
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Alertas",
+    "RelativePath": "api/admin/inventario/alertas",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[reachBack.Models.Categoria, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.AlertaStockDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -20,22 +20,58 @@
     ]
   },
   {
-    "ContainingType": "reachBack.Controllers.CategoriasController",
-    "Method": "PostCategoria",
-    "RelativePath": "api/Categorias",
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Kardex",
+    "RelativePath": "api/admin/inventario/kardex",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productoId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "tamano",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PaginaDto\u00601[[reachBack.Dtos.MovimientoDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Movimiento",
+    "RelativePath": "api/admin/inventario/movimientos",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "categoria",
-        "Type": "reachBack.Models.Categoria",
+        "Name": "dto",
+        "Type": "reachBack.Dtos.MovimientoCrearDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "reachBack.Models.Categoria",
+        "Type": "reachBack.Dtos.MovimientoDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -46,9 +82,70 @@
     ]
   },
   {
-    "ContainingType": "reachBack.Controllers.CategoriasController",
-    "Method": "GetCategoria",
-    "RelativePath": "api/Categorias/{id}",
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Panel",
+    "RelativePath": "api/admin/panel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ResumenPanelDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Pedidos",
+    "RelativePath": "api/admin/pedidos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "q",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "tamano",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PaginaDto\u00601[[reachBack.Dtos.PedidoResumenDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Pedido",
+    "RelativePath": "api/admin/pedidos/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -61,7 +158,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "reachBack.Models.Categoria",
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -72,9 +169,9 @@
     ]
   },
   {
-    "ContainingType": "reachBack.Controllers.CategoriasController",
-    "Method": "PutCategoria",
-    "RelativePath": "api/Categorias/{id}",
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Armado",
+    "RelativePath": "api/admin/pedidos/{id}/armado",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -85,17 +182,1033 @@
         "IsRequired": true
       },
       {
-        "Name": "categoria",
-        "Type": "reachBack.Models.Categoria",
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ActualizarArmadoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Cancelar",
+    "RelativePath": "api/admin/pedidos/{id}/cancelar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Envio",
+    "RelativePath": "api/admin/pedidos/{id}/envio",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ActualizarEnvioDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "Proveedores",
+    "RelativePath": "api/admin/proveedores",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.ProveedorDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "CrearProveedor",
+    "RelativePath": "api/admin/proveedores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ProveedorGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ProveedorDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AdminController",
+    "Method": "ActualizarProveedor",
+    "RelativePath": "api/admin/proveedores/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ProveedorGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ProveedorDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.AuthRespuestaDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AuthController",
+    "Method": "CambiarPassword",
+    "RelativePath": "api/auth/password",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.CambiarPasswordDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
+    "ContainingType": "reachBack.Controllers.AuthController",
+    "Method": "Perfil",
+    "RelativePath": "api/auth/perfil",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.UsuarioDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AuthController",
+    "Method": "ActualizarPerfil",
+    "RelativePath": "api/auth/perfil",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.PerfilActualizarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.UsuarioDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.AuthController",
+    "Method": "Registro",
+    "RelativePath": "api/auth/registro",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.RegistroDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.AuthRespuestaDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "Obtener",
+    "RelativePath": "api/carrito",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "Vaciar",
+    "RelativePath": "api/carrito",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "AgregarEnsamble",
+    "RelativePath": "api/carrito/ensamble",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.AgregarEnsambleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "EliminarEnsamble",
+    "RelativePath": "api/carrito/ensamble/{ensambleId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ensambleId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "Agregar",
+    "RelativePath": "api/carrito/items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.AgregarCarritoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "Actualizar",
+    "RelativePath": "api/carrito/items/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ActualizarCantidadDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "Eliminar",
+    "RelativePath": "api/carrito/items/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CarritoController",
+    "Method": "AgregarPrearmado",
+    "RelativePath": "api/carrito/prearmado/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CarritoDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "reachBack.Controllers.CategoriasController",
-    "Method": "DeleteCategoria",
-    "RelativePath": "api/Categorias/{id}",
+    "Method": "Listar",
+    "RelativePath": "api/categorias",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.CategoriaDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CategoriasController",
+    "Method": "Crear",
+    "RelativePath": "api/categorias",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.CategoriaGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CategoriaDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CategoriasController",
+    "Method": "Actualizar",
+    "RelativePath": "api/categorias/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.CategoriaGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.CategoriaDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.CategoriasController",
+    "Method": "Eliminar",
+    "RelativePath": "api/categorias/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ConfiguradorController",
+    "Method": "Opciones",
+    "RelativePath": "api/configurador/opciones",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "reachBack.Dtos.OpcionesRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.OpcionComponenteDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ConfiguradorController",
+    "Method": "Pasos",
+    "RelativePath": "api/configurador/pasos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.PasoConfiguradorDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ConfiguradorController",
+    "Method": "Prearmados",
+    "RelativePath": "api/configurador/prearmados",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.PrearmadoDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ConfiguradorController",
+    "Method": "Validar",
+    "RelativePath": "api/configurador/validar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "seleccion",
+        "Type": "reachBack.Dtos.SeleccionPcDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ResumenConfiguracionDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.DireccionesController",
+    "Method": "Listar",
+    "RelativePath": "api/direcciones",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.DireccionDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.DireccionesController",
+    "Method": "Crear",
+    "RelativePath": "api/direcciones",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.DireccionGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.DireccionDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.DireccionesController",
+    "Method": "Actualizar",
+    "RelativePath": "api/direcciones/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.DireccionGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.DireccionDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.DireccionesController",
+    "Method": "Eliminar",
+    "RelativePath": "api/direcciones/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "reachBack.Controllers.DireccionesController",
+    "Method": "Predeterminar",
+    "RelativePath": "api/direcciones/{id}/predeterminada",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "reachBack.Controllers.EnviosController",
+    "Method": "Metodos",
+    "RelativePath": "api/envios/metodos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "subtotal",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.MetodoEnvioDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.PedidosController",
+    "Method": "Crear",
+    "RelativePath": "api/pedidos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.CheckoutDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.PedidosController",
+    "Method": "MisPedidos",
+    "RelativePath": "api/pedidos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[reachBack.Dtos.PedidoResumenDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.PedidosController",
+    "Method": "Obtener",
+    "RelativePath": "api/pedidos/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.PedidosController",
+    "Method": "Cancelar",
+    "RelativePath": "api/pedidos/{id}/cancelar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PedidoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Listar",
+    "RelativePath": "api/productos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CategoriaId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Q",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Marca",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Orden",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SoloOfertas",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "SoloDestacados",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncluirInactivos",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Tamano",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.PaginaDto\u00601[[reachBack.Dtos.ProductoListaDto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Crear",
+    "RelativePath": "api/productos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ProductoGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ProductoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Obtener",
+    "RelativePath": "api/productos/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ProductoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Actualizar",
+    "RelativePath": "api/productos/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "reachBack.Dtos.ProductoGuardarDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "reachBack.Dtos.ProductoDetalleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Desactivar",
+    "RelativePath": "api/productos/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -110,102 +1223,9 @@
   },
   {
     "ContainingType": "reachBack.Controllers.ProductosController",
-    "Method": "GetProductos",
-    "RelativePath": "api/Productos",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[reachBack.Models.Producto, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "reachBack.Controllers.ProductosController",
-    "Method": "PostProducto",
-    "RelativePath": "api/Productos",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "producto",
-        "Type": "reachBack.Models.Producto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "reachBack.Models.Producto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "reachBack.Controllers.ProductosController",
-    "Method": "GetProducto",
-    "RelativePath": "api/Productos/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "reachBack.Models.Producto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "reachBack.Controllers.ProductosController",
-    "Method": "PutProducto",
-    "RelativePath": "api/Productos/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "producto",
-        "Type": "reachBack.Models.Producto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "reachBack.Controllers.ProductosController",
-    "Method": "DeleteProducto",
-    "RelativePath": "api/Productos/{id}",
-    "HttpMethod": "DELETE",
+    "Method": "Activar",
+    "RelativePath": "api/productos/{id}/activar",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -218,16 +1238,22 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "reachBack.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "reachBack.Controllers.ProductosController",
+    "Method": "Marcas",
+    "RelativePath": "api/productos/marcas",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "categoriaId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[reachBack.WeatherForecast, reachBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -235,7 +1261,6 @@
         ],
         "StatusCode": 200
       }
-    ],
-    "EndpointName": "GetWeatherForecast"
+    ]
   }
 ]

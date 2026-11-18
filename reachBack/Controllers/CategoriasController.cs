@@ -1,100 +1,39 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using reachBack.Data; // Ajusta al namespace de tu DbContext si es distinto
+using reachBack.Dtos;
 using reachBack.Models;
+using reachBack.Services;
 
-namespace reachBack.Controllers
+namespace reachBack.Controllers;
+
+[ApiController]
+[Route("api/categorias")]
+public class CategoriasController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoriasController : ControllerBase
+    private readonly CatalogoAdminService _catalogo;
+
+    public CategoriasController(CatalogoAdminService catalogo)
     {
-        private readonly ApplicationDbContext _context;
+        _catalogo = catalogo;
+    }
 
-        public CategoriasController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult<List<CategoriaDto>>> Listar() => Ok(await _catalogo.CategoriasAsync());
 
-        // GET: api/Categorias
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
-        {
-            return await _context.Categorias
-                .Include(c => c.Productos) // Trae los productos asociados si se requiere
-                .ToListAsync();
-        }
+    [HttpPost]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<ActionResult<CategoriaDto>> Crear(CategoriaGuardarDto dto) => Ok(await _catalogo.GuardarCategoriaAsync(null, dto));
 
-        // GET: api/Categorias/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Categoria>> GetCategoria(int id)
-        {
-            var categoria = await _context.Categorias
-                .Include(c => c.Productos)
-                .FirstOrDefaultAsync(c => c.Id == id);
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = Roles.Personal)]
+    public async Task<ActionResult<CategoriaDto>> Actualizar(int id, CategoriaGuardarDto dto) => Ok(await _catalogo.GuardarCategoriaAsync(id, dto));
 
-            if (categoria == null)
-            {
-                return NotFound();
-            }
-
-            return categoria;
-        }
-
-        // POST: api/Categorias
-        [HttpPost]
-        public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
-        {
-            _context.Categorias.Add(categoria);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetCategoria), new { id = categoria.Id }, categoria);
-        }
-
-        // PUT: api/Categorias/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
-        {
-            if (id != categoria.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(categoria).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Categorias.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Categorias/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategoria(int id)
-        {
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = Roles.Administrador)]
+    public async Task<IActionResult> Eliminar(int id)
+    {
+        await _catalogo.EliminarCategoriaAsync(id);
+        return NoContent();
     }
 }

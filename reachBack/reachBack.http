@@ -1,6 +1,31 @@
-@reachBack_HostAddress = http://localhost:5133
+@host = http://localhost:5133
+@token = pega-aqui-el-token
 
-GET {{reachBack_HostAddress}}/weatherforecast/
-Accept: application/json
+### Login cliente
+POST {{host}}/api/auth/login
+Content-Type: application/json
 
-###
+{ "email": "cliente@reach.mx", "password": "Cliente2026!" }
+
+### Catálogo con filtros
+GET {{host}}/api/productos?categoriaId=5&orden=precio_asc&pagina=1&tamano=20
+
+### Pasos del configurador
+GET {{host}}/api/configurador/pasos
+
+### Tarjetas madre compatibles con Ryzen 7 7800X3D (id 4)
+POST {{host}}/api/configurador/opciones
+Content-Type: application/json
+
+{ "tipo": "MOTHERBOARD", "seleccion": { "cpuId": 4, "almacenamientoIds": [] } }
+
+### Carrito
+GET {{host}}/api/carrito
+Authorization: Bearer {{token}}
+
+### Métodos de envío
+GET {{host}}/api/envios/metodos?subtotal=2500
+
+### Panel (empleado o administrador)
+GET {{host}}/api/admin/panel
+Authorization: Bearer {{token}}

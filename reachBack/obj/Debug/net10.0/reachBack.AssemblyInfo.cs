@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("reachback-tienda-2026")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+301bd85953d9ceff5116b11085bf4b621f1c3144")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37309641121afa0dfb8d68331a04f40ef47a2fb5")]
 [assembly: System.Reflection.AssemblyProductAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
