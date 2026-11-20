@@ -1,0 +1,14 @@
+.vs/
+**/bin/
+*.user
+*suo
+cat > .gitignore <<'EOF'
+.vs/
+**/bin/
+*.user
+*.suo
+*.ruser
+.idea/
+*.swp
+.DS_STORE
+Thumbs.db
