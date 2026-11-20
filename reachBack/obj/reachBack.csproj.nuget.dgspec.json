@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "Z:\\Desktop\\IDGS1005\\DMI\\reach\\backReach\\reachBack\\reachBack.csproj": {}
+    "C:\\Users\\yair_\\Desktop\\ProyectoMovil\\backReach\\reachBack\\reachBack.csproj": {}
   },
   "projects": {
-    "Z:\\Desktop\\IDGS1005\\DMI\\reach\\backReach\\reachBack\\reachBack.csproj": {
+    "C:\\Users\\yair_\\Desktop\\ProyectoMovil\\backReach\\reachBack\\reachBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Z:\\Desktop\\IDGS1005\\DMI\\reach\\backReach\\reachBack\\reachBack.csproj",
+        "projectUniqueName": "C:\\Users\\yair_\\Desktop\\ProyectoMovil\\backReach\\reachBack\\reachBack.csproj",
         "projectName": "reachBack",
-        "projectPath": "Z:\\Desktop\\IDGS1005\\DMI\\reach\\backReach\\reachBack\\reachBack.csproj",
-        "packagesPath": "C:\\Users\\sbzgabb\\.nuget\\packages\\",
-        "outputPath": "Z:\\Desktop\\IDGS1005\\DMI\\reach\\backReach\\reachBack\\obj\\",
+        "projectPath": "C:\\Users\\yair_\\Desktop\\ProyectoMovil\\backReach\\reachBack\\reachBack.csproj",
+        "packagesPath": "C:\\Users\\yair_\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\yair_\\Desktop\\ProyectoMovil\\backReach\\reachBack\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\sbzgabb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\yair_\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -84,6 +83,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[10.0.14, )"
+            },
+            "System.Security.Cryptography.Pkcs": {
+              "target": "Package",
+              "version": "[11.0.0, )"
             }
           },
           "imports": [
@@ -105,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

@@ -16,13 +16,15 @@ public class PedidoService
     private readonly InventarioService _inventario;
     private readonly TiendaOptions _tienda;
     private readonly ILogger<PedidoService> _logger;
+    private readonly NotificacionService _notificaciones;
 
-    public PedidoService(ApplicationDbContext db, InventarioService inventario, IOptions<TiendaOptions> tienda, ILogger<PedidoService> logger)
+    public PedidoService(ApplicationDbContext db, InventarioService inventario, IOptions<TiendaOptions> tienda, ILogger<PedidoService> logger, NotificacionService notificaciones)
     {
         _db = db;
         _inventario = inventario;
         _tienda = tienda.Value;
         _logger = logger;
+        _notificaciones = notificaciones;
     }
 
     public async Task<PedidoDetalleDto> CrearAsync(int usuarioId, CheckoutDto dto)
@@ -128,6 +130,13 @@ public class PedidoService
         }
 
         _db.CarritoItems.RemoveRange(items);
+        _notificaciones.Agregar(usuarioId, "Pedido confirmado",
+            $"Recibimos tu pedido {pedido.Folio} por {NotificacionService.Dinero(pedido.Total)}. Te avisaremos cada avance.",
+            TiposNotificacion.Pedido, pedido.Id);
+        await _notificaciones.AgregarAPersonalAsync("Nuevo pedido",
+            $"{usuario.Nombre} realizó el pedido {pedido.Folio} por {NotificacionService.Dinero(pedido.Total)}{(pedido.IncluyeEnsamble ? " con ensamble" : string.Empty)}.",
+            TiposNotificacion.Pedido, pedido.Id);
+        await _notificaciones.AvisarStockBajoAsync(items.Select(i => i.Producto!));
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
 
@@ -181,6 +190,18 @@ public class PedidoService
             Descripcion = esPersonal ? "El pedido fue cancelado por la tienda. El reembolso se verá reflejado en 5 a 10 días hábiles." : "Cancelaste tu pedido. El reembolso se verá reflejado en 5 a 10 días hábiles.",
             Fecha = DateTime.UtcNow
         });
+        if (esPersonal)
+        {
+            _notificaciones.Agregar(p.UsuarioId, "Pedido cancelado",
+                $"La tienda canceló tu pedido {p.Folio}. El reembolso se verá reflejado en 5 a 10 días hábiles.",
+                TiposNotificacion.Pedido, p.Id);
+        }
+        else
+        {
+            await _notificaciones.AgregarAPersonalAsync("Pedido cancelado por el cliente",
+                $"El cliente canceló el pedido {p.Folio}. Las piezas regresaron al inventario.",
+                TiposNotificacion.Pedido, p.Id);
+        }
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
         return await DetalleAsync(p.Id, usuarioId, esPersonal);
@@ -229,6 +250,7 @@ public class PedidoService
             ? ("Ensamblando tu equipo", "Nuestro técnico está armando y gestionando el cableado de tu PC.")
             : ("Ensamble terminado", "Tu equipo pasó las pruebas de encendido, temperatura y estabilidad.");
         _db.PedidoSeguimientos.Add(new PedidoSeguimiento { PedidoId = p.Id, Titulo = titulo, Descripcion = descripcion, Fecha = DateTime.UtcNow });
+        _notificaciones.Agregar(p.UsuarioId, titulo, $"Pedido {p.Folio}: {descripcion}", TiposNotificacion.Pedido, p.Id);
         await _db.SaveChangesAsync();
         return await DetalleAsync(p.Id, 0, true);
     }
@@ -276,6 +298,22 @@ public class PedidoService
                 Descripcion = requiereEnvio ? "Tu pedido fue entregado. ¡Gracias por comprar en Reach!" : "Recogiste tu pedido en tienda. ¡Gracias por comprar en Reach!",
                 Fecha = DateTime.UtcNow.AddSeconds(1)
             });
+        }
+
+        if (dto.Estado == EstadosPedido.EnvioEntregado)
+        {
+            _notificaciones.Agregar(p.UsuarioId, "Pedido entregado",
+                $"Tu pedido {p.Folio} fue entregado. ¡Gracias por comprar en Reach!", TiposNotificacion.Pedido, p.Id);
+        }
+        else if (requiereEnvio)
+        {
+            _notificaciones.Agregar(p.UsuarioId, "Tu pedido va en camino",
+                $"El pedido {p.Folio} salió con {p.Paqueteria}. Guía: {p.NumeroGuia}.", TiposNotificacion.Pedido, p.Id);
+        }
+        else
+        {
+            _notificaciones.Agregar(p.UsuarioId, "Listo para recoger",
+                $"Tu pedido {p.Folio} ya te espera en tienda. Presenta tu folio e identificación.", TiposNotificacion.Pedido, p.Id);
         }
 
         p.EstadoEnvio = dto.Estado;

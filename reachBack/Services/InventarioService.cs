@@ -9,10 +9,12 @@ namespace reachBack.Services;
 public class InventarioService
 {
     private readonly ApplicationDbContext _db;
+    private readonly NotificacionService _notificaciones;
 
-    public InventarioService(ApplicationDbContext db)
+    public InventarioService(ApplicationDbContext db, NotificacionService notificaciones)
     {
         _db = db;
+        _notificaciones = notificaciones;
     }
 
     public Task RegistrarAsync(Producto producto, string tipo, int cantidad, string motivo, string responsable, int? pedidoId)
@@ -50,6 +52,7 @@ public class InventarioService
         var producto = await _db.Productos.FirstOrDefaultAsync(p => p.Id == dto.ProductoId)
             ?? throw AppException.NoEncontrado("Producto no encontrado.");
         await RegistrarAsync(producto, dto.TipoMovimiento, dto.Cantidad, dto.Motivo.Trim(), responsable, null);
+        if (dto.TipoMovimiento == "Salida") await _notificaciones.AvisarStockBajoAsync(new[] { producto });
         await _db.SaveChangesAsync();
 
         var mov = await _db.MovimientosKardex.AsNoTracking().Include(m => m.Producto)

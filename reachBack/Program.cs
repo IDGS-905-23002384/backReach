@@ -85,6 +85,7 @@ builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<DireccionService>();
 builder.Services.AddScoped<EnvioService>();
 builder.Services.AddScoped<CatalogoAdminService>();
+builder.Services.AddScoped<NotificacionService>();
 
 var app = builder.Build();
 
@@ -93,6 +94,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Inicializacion");
     await db.Database.EnsureCreatedAsync();
+    await ActualizadorEsquema.AplicarAsync(db, logger);
     await DbSeeder.SeedAsync(db, app.Environment, logger);
 }
 

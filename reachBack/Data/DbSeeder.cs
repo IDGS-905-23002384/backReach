@@ -247,6 +247,11 @@ public static class DbSeeder
             m.PedidoId = pedido.Id;
         }
         await db.SaveChangesAsync();
+
+        db.Notificaciones.AddRange(
+            new Notificacion { UsuarioId = cliente.Id, Titulo = "Pedido entregado", Mensaje = $"Tu pedido {pedido.Folio} fue entregado. ¡Gracias por comprar en Reach!", Tipo = TiposNotificacion.Pedido, PedidoId = pedido.Id, Leida = true, Fecha = fecha.AddDays(4) },
+            new Notificacion { UsuarioId = cliente.Id, Titulo = "¡Bienvenido a Reach!", Mensaje = "Arma tu PC con piezas 100% compatibles y recibe aquí cada avance de tus pedidos.", Tipo = TiposNotificacion.Sistema, Fecha = DateTime.UtcNow });
+        await db.SaveChangesAsync();
         logger.LogInformation("Usuarios de demostración creados");
     }
 }

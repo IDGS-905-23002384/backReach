@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Direccion> Direcciones => Set<Direccion>();
     public DbSet<MetodoEnvio> MetodosEnvio => Set<MetodoEnvio>();
     public DbSet<Movimiento> MovimientosKardex => Set<Movimiento>();
+    public DbSet<Notificacion> Notificaciones => Set<Notificacion>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -172,6 +173,16 @@ public class ApplicationDbContext : DbContext
             e.Property(x => x.AdministradorResponsable).HasMaxLength(160);
             e.HasIndex(x => x.Fecha);
             e.HasOne(x => x.Producto).WithMany().HasForeignKey(x => x.ProductoId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Notificacion>(e =>
+        {
+            e.ToTable("Notificaciones");
+            e.Property(x => x.Titulo).HasMaxLength(120).IsRequired();
+            e.Property(x => x.Mensaje).HasMaxLength(400).IsRequired();
+            e.Property(x => x.Tipo).HasMaxLength(20).IsRequired();
+            e.HasIndex(x => new { x.UsuarioId, x.Leida });
+            e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId).OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<FichaTecnica>(e =>

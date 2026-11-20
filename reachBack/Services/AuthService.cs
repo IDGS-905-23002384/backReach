@@ -46,6 +46,14 @@ public class AuthService
 
         _db.Usuarios.Add(usuario);
         await _db.SaveChangesAsync();
+        _db.Notificaciones.Add(new Notificacion
+        {
+            UsuarioId = usuario.Id,
+            Titulo = "¡Bienvenido a Reach!",
+            Mensaje = "Arma tu PC con piezas 100% compatibles y recibe aquí cada avance de tus pedidos.",
+            Tipo = TiposNotificacion.Sistema
+        });
+        await _db.SaveChangesAsync();
         _logger.LogInformation("Nuevo usuario registrado {UsuarioId}", usuario.Id);
         return Respuesta(usuario);
     }
