@@ -57,3 +57,32 @@ public record PrearmadoDto(
     decimal PrecioTotal,
     bool Disponible,
     List<PrearmadoComponenteDto> Componentes);
+
+public class RecomendacionRequestDto
+{
+    [Range(typeof(decimal), "5000", "250000", ErrorMessage = "El presupuesto debe estar entre $5,000 y $250,000.")]
+    public decimal Presupuesto { get; set; }
+
+    [Required]
+    [RegularExpression("^(OFICINA|GAMING_FHD|GAMING_QHD|CREACION)$", ErrorMessage = "Uso no válido.")]
+    public string Uso { get; set; } = string.Empty;
+}
+
+public record UsoEquipoDto(string Clave, string Nombre, string Descripcion, decimal PresupuestoSugerido);
+
+public record RecomendacionDto(
+    string Nivel,
+    string Titulo,
+    string Descripcion,
+    int Puntaje,
+    decimal Ahorro,
+    List<string> Destacados,
+    SeleccionPcDto Seleccion,
+    ResumenConfiguracionDto Resumen);
+
+public record RecomendacionesDto(
+    string Uso,
+    string UsoNombre,
+    decimal Presupuesto,
+    decimal MinimoPosible,
+    List<RecomendacionDto> Opciones);

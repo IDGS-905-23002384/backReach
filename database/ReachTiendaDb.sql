@@ -22,6 +22,18 @@ CREATE TABLE Usuarios (
 );
 CREATE UNIQUE INDEX IX_Usuarios_Email ON Usuarios (Email);
 
+CREATE TABLE Notificaciones (
+    Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Notificaciones PRIMARY KEY,
+    UsuarioId int NOT NULL CONSTRAINT FK_Notificaciones_Usuarios_UsuarioId REFERENCES Usuarios (Id) ON DELETE CASCADE,
+    Titulo nvarchar(120) NOT NULL,
+    Mensaje nvarchar(400) NOT NULL,
+    Tipo nvarchar(20) NOT NULL,
+    PedidoId int NULL,
+    Leida bit NOT NULL,
+    Fecha datetime2 NOT NULL
+);
+CREATE INDEX IX_Notificaciones_UsuarioId_Leida ON Notificaciones (UsuarioId, Leida);
+
 CREATE TABLE Categorias (
     Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Categorias PRIMARY KEY,
     Nombre nvarchar(80) NOT NULL,
@@ -119,7 +131,9 @@ CREATE TABLE Direcciones (
     Estado nvarchar(80) NOT NULL,
     CodigoPostal nvarchar(5) NOT NULL,
     Referencias nvarchar(250) NULL,
-    EsPredeterminada bit NOT NULL
+    EsPredeterminada bit NOT NULL,
+    Latitud decimal(9,6) NULL,
+    Longitud decimal(9,6) NULL
 );
 CREATE INDEX IX_Direcciones_UsuarioId ON Direcciones (UsuarioId);
 
@@ -134,6 +148,18 @@ CREATE TABLE MetodosEnvio (
     AplicaEnvioGratis bit NOT NULL,
     RequiereDireccion bit NOT NULL,
     Activo bit NOT NULL
+);
+
+CREATE TABLE Sucursales (
+    Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Sucursales PRIMARY KEY,
+    Nombre nvarchar(120) NOT NULL,
+    Direccion nvarchar(250) NOT NULL,
+    Ciudad nvarchar(80) NOT NULL,
+    Telefono nvarchar(20) NOT NULL,
+    Horario nvarchar(120) NOT NULL,
+    Latitud decimal(9,6) NOT NULL,
+    Longitud decimal(9,6) NOT NULL,
+    Activa bit NOT NULL
 );
 
 CREATE TABLE Pedidos (
@@ -165,12 +191,16 @@ CREATE TABLE Pedidos (
     MetodoPago nvarchar(30) NOT NULL,
     TarjetaMarca nvarchar(20) NULL,
     TarjetaUltimos4 nvarchar(4) NULL,
-    Notas nvarchar(500) NULL
+    Notas nvarchar(500) NULL,
+    EnvioLatitud decimal(9,6) NULL,
+    EnvioLongitud decimal(9,6) NULL,
+    SucursalId int NULL CONSTRAINT FK_Pedidos_Sucursales_SucursalId REFERENCES Sucursales (Id)
 );
 CREATE UNIQUE INDEX IX_Pedidos_Folio ON Pedidos (Folio);
 CREATE INDEX IX_Pedidos_Fecha ON Pedidos (Fecha);
 CREATE INDEX IX_Pedidos_UsuarioId ON Pedidos (UsuarioId);
 CREATE INDEX IX_Pedidos_MetodoEnvioId ON Pedidos (MetodoEnvioId);
+CREATE INDEX IX_Pedidos_SucursalId ON Pedidos (SucursalId);
 
 CREATE TABLE PedidoDetalles (
     Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_PedidoDetalles PRIMARY KEY,
@@ -778,10 +808,16 @@ INSERT INTO MovimientosKardex (ProductoId, TipoMovimiento, Cantidad, StockResult
 INSERT INTO MovimientosKardex (ProductoId, TipoMovimiento, Cantidad, StockResultante, Fecha, Motivo, PedidoId, AdministradorResponsable) VALUES (72, N'Entrada', 16, 16, DATEADD(DAY, -30, SYSUTCDATETIME()), N'Inventario inicial', NULL, N'sistema');
 GO
 
+INSERT INTO Sucursales (Nombre, Direccion, Ciudad, Telefono, Horario, Latitud, Longitud, Activa) VALUES
+ (N'Reach León Centro', N'Blvd. Adolfo López Mateos 1502, Col. Los Gavilanes', N'León, Gto.', N'4777123400', N'Lun a Sáb 10:00 a 20:00 · Dom 11:00 a 17:00', 21.124300, -101.671900, 1),
+ (N'Reach Plaza Mayor', N'Blvd. Juan Alonso de Torres 2002, Valle del Campestre', N'León, Gto.', N'4777123401', N'Lun a Dom 11:00 a 21:00', 21.159300, -101.694800, 1),
+ (N'Reach Guanajuato Capital', N'Av. Juárez 120, Zona Centro', N'Guanajuato, Gto.', N'4737321500', N'Lun a Sáb 10:00 a 19:00', 21.017000, -101.256500, 1);
+GO
+
 INSERT INTO MetodosEnvio (Nombre, Descripcion, Paqueteria, Costo, DiasMin, DiasMax, AplicaEnvioGratis, RequiereDireccion, Activo) VALUES
  (N'Envío estándar', N'Entrega a domicilio en 3 a 5 días hábiles.', N'Paquetexpress', 149, 3, 5, 1, 1, 1),
  (N'Envío express', N'Entrega a domicilio en 1 a 2 días hábiles.', N'Estafeta', 299, 1, 2, 0, 1, 1),
- (N'Recoger en tienda', N'Blvd. Adolfo López Mateos 1502, León, Gto. Sin costo.', N'Tienda Reach León', 0, 0, 1, 0, 0, 1);
+ (N'Recoger en tienda', N'Elige la sucursal más cercana. Sin costo.', N'Sucursal Reach', 0, 0, 1, 0, 0, 1);
 GO
 
 INSERT INTO Usuarios (Nombre, Email, PasswordHash, Telefono, Rol, Activo, IntentosFallidos, BloqueadoHasta, FechaRegistro) VALUES
@@ -790,8 +826,13 @@ INSERT INTO Usuarios (Nombre, Email, PasswordHash, Telefono, Rol, Activo, Intent
  (N'Carlos Sánchez', N'cliente@reach.mx', N'$2a$11$HX.CHVKmIH1EGBQJ3E8FaeHGjVsYtCTXI8a0XPzBuqIyNLU8W/mPi', N'4779876543', N'Comprador', 1, 0, NULL, SYSUTCDATETIME());
 GO
 
-INSERT INTO Direcciones (UsuarioId, Alias, NombreRecibe, Telefono, Calle, NumeroExterior, NumeroInterior, Colonia, Ciudad, Estado, CodigoPostal, Referencias, EsPredeterminada)
-SELECT Id, N'Casa', N'Carlos Sánchez', N'4779876543', N'Blvd. Torres Landa', N'1701', NULL, N'Jardines del Moral', N'León', N'Guanajuato', N'37160', N'Portón negro, frente al parque', 1
+INSERT INTO Direcciones (UsuarioId, Alias, NombreRecibe, Telefono, Calle, NumeroExterior, NumeroInterior, Colonia, Ciudad, Estado, CodigoPostal, Referencias, EsPredeterminada, Latitud, Longitud)
+SELECT Id, N'Casa', N'Carlos Sánchez', N'4779876543', N'Blvd. Torres Landa', N'1701', NULL, N'Jardines del Moral', N'León', N'Guanajuato', N'37160', N'Portón negro, frente al parque', 1, 21.149800, -101.701400
+FROM Usuarios WHERE Email = N'cliente@reach.mx';
+GO
+
+INSERT INTO Notificaciones (UsuarioId, Titulo, Mensaje, Tipo, PedidoId, Leida, Fecha)
+SELECT Id, N'¡Bienvenido a Reach!', N'Arma tu PC con piezas 100% compatibles y recibe aquí cada avance de tus pedidos.', N'Sistema', NULL, 0, SYSUTCDATETIME()
 FROM Usuarios WHERE Email = N'cliente@reach.mx';
 GO
 
