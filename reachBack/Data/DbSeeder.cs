@@ -73,7 +73,16 @@ public static class DbSeeder
             db.MetodosEnvio.AddRange(
                 new MetodoEnvio { Nombre = "Envío estándar", Descripcion = "Entrega a domicilio en 3 a 5 días hábiles.", Paqueteria = "Paquetexpress", Costo = 149m, DiasMin = 3, DiasMax = 5, AplicaEnvioGratis = true, RequiereDireccion = true },
                 new MetodoEnvio { Nombre = "Envío express", Descripcion = "Entrega a domicilio en 1 a 2 días hábiles.", Paqueteria = "Estafeta", Costo = 299m, DiasMin = 1, DiasMax = 2, AplicaEnvioGratis = false, RequiereDireccion = true },
-                new MetodoEnvio { Nombre = "Recoger en tienda", Descripcion = "Blvd. Adolfo López Mateos 1502, León, Gto. Sin costo.", Paqueteria = "Tienda Reach León", Costo = 0m, DiasMin = 0, DiasMax = 1, AplicaEnvioGratis = false, RequiereDireccion = false });
+                new MetodoEnvio { Nombre = "Recoger en tienda", Descripcion = "Elige la sucursal más cercana. Sin costo.", Paqueteria = "Sucursal Reach", Costo = 0m, DiasMin = 0, DiasMax = 1, AplicaEnvioGratis = false, RequiereDireccion = false });
+            await db.SaveChangesAsync();
+        }
+
+        if (!await db.Sucursales.AnyAsync())
+        {
+            db.Sucursales.AddRange(
+                new Sucursal { Nombre = "Reach León Centro", Direccion = "Blvd. Adolfo López Mateos 1502, Col. Los Gavilanes", Ciudad = "León, Gto.", Telefono = "4777123400", Horario = "Lun a Sáb 10:00 a 20:00 · Dom 11:00 a 17:00", Latitud = 21.124300m, Longitud = -101.671900m },
+                new Sucursal { Nombre = "Reach Plaza Mayor", Direccion = "Blvd. Juan Alonso de Torres 2002, Valle del Campestre", Ciudad = "León, Gto.", Telefono = "4777123401", Horario = "Lun a Dom 11:00 a 21:00", Latitud = 21.159300m, Longitud = -101.694800m },
+                new Sucursal { Nombre = "Reach Guanajuato Capital", Direccion = "Av. Juárez 120, Zona Centro", Ciudad = "Guanajuato, Gto.", Telefono = "4737321500", Horario = "Lun a Sáb 10:00 a 19:00", Latitud = 21.017000m, Longitud = -101.256500m });
             await db.SaveChangesAsync();
         }
 
@@ -190,7 +199,9 @@ public static class DbSeeder
             Estado = "Guanajuato",
             CodigoPostal = "37160",
             Referencias = "Portón negro, frente al parque",
-            EsPredeterminada = true
+            EsPredeterminada = true,
+            Latitud = 21.149800m,
+            Longitud = -101.701400m
         };
         db.Direcciones.Add(direccion);
         await db.SaveChangesAsync();
@@ -227,6 +238,8 @@ public static class DbSeeder
             EnvioEstado = direccion.Estado,
             EnvioCodigoPostal = direccion.CodigoPostal,
             EnvioReferencias = direccion.Referencias,
+            EnvioLatitud = direccion.Latitud,
+            EnvioLongitud = direccion.Longitud,
             TarjetaMarca = "Visa",
             TarjetaUltimos4 = "4242"
         };

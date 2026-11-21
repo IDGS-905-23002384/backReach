@@ -86,6 +86,8 @@ builder.Services.AddScoped<DireccionService>();
 builder.Services.AddScoped<EnvioService>();
 builder.Services.AddScoped<CatalogoAdminService>();
 builder.Services.AddScoped<NotificacionService>();
+builder.Services.AddScoped<SucursalService>();
+builder.Services.AddScoped<RastreoService>();
 
 var app = builder.Build();
 

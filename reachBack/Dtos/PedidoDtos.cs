@@ -15,7 +15,9 @@ public record DireccionDto(
     string Estado,
     string CodigoPostal,
     string? Referencias,
-    bool EsPredeterminada);
+    bool EsPredeterminada,
+    decimal? Latitud,
+    decimal? Longitud);
 
 public class DireccionGuardarDto
 {
@@ -61,6 +63,12 @@ public class DireccionGuardarDto
     public string? Referencias { get; set; }
 
     public bool EsPredeterminada { get; set; }
+
+    [Range(-90.0, 90.0, ErrorMessage = "Latitud no válida.")]
+    public decimal? Latitud { get; set; }
+
+    [Range(-180.0, 180.0, ErrorMessage = "Longitud no válida.")]
+    public decimal? Longitud { get; set; }
 }
 
 public record MetodoEnvioDto(
@@ -97,6 +105,8 @@ public class PagoDto
 public class CheckoutDto
 {
     public int? DireccionId { get; set; }
+
+    public int? SucursalId { get; set; }
 
     [Range(1, int.MaxValue, ErrorMessage = "Selecciona un método de envío.")]
     public int MetodoEnvioId { get; set; }
@@ -168,7 +178,9 @@ public record PedidoDetalleDto(
     string ClienteEmail,
     bool PuedeCancelar,
     List<PedidoDetalleItemDto> Detalles,
-    List<SeguimientoDto> Seguimiento);
+    List<SeguimientoDto> Seguimiento,
+    SucursalDto? Sucursal,
+    RastreoDto? Rastreo);
 
 public class ActualizarArmadoDto
 {

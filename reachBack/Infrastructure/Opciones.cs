@@ -15,4 +15,7 @@ public class TiendaOptions
     public decimal TasaIva { get; set; } = 0.16m;
     public int MaxIntentosLogin { get; set; } = 5;
     public int MinutosBloqueo { get; set; } = 15;
+    public string AlmacenNombre { get; set; } = "CEDIS Reach · Puerto Interior, Silao";
+    public double AlmacenLatitud { get; set; } = 20.9725;
+    public double AlmacenLongitud { get; set; } = -101.4320;
 }

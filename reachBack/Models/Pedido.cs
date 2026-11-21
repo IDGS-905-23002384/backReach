@@ -35,6 +35,11 @@ public class Pedido
     public string? EnvioEstado { get; set; }
     public string? EnvioCodigoPostal { get; set; }
     public string? EnvioReferencias { get; set; }
+    public decimal? EnvioLatitud { get; set; }
+    public decimal? EnvioLongitud { get; set; }
+
+    public int? SucursalId { get; set; }
+    public Sucursal? Sucursal { get; set; }
 
     public string MetodoPago { get; set; } = "Tarjeta";
     public string? TarjetaMarca { get; set; }
