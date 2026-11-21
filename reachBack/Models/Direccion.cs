@@ -18,4 +18,6 @@ public class Direccion
     public string CodigoPostal { get; set; } = string.Empty;
     public string? Referencias { get; set; }
     public bool EsPredeterminada { get; set; }
+    public decimal? Latitud { get; set; }
+    public decimal? Longitud { get; set; }
 }

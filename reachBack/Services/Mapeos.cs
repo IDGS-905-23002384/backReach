@@ -107,7 +107,7 @@ public static class Mapeos
 
     public static DireccionDto ADto(this Direccion d) => new(
         d.Id, d.Alias, d.NombreRecibe, d.Telefono, d.Calle, d.NumeroExterior, d.NumeroInterior,
-        d.Colonia, d.Ciudad, d.Estado, d.CodigoPostal, d.Referencias, d.EsPredeterminada);
+        d.Colonia, d.Ciudad, d.Estado, d.CodigoPostal, d.Referencias, d.EsPredeterminada, d.Latitud, d.Longitud);
 
     private static string? Limpiar(string? valor) => string.IsNullOrWhiteSpace(valor) ? null : valor.Trim();
 }

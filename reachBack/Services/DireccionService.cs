@@ -98,5 +98,8 @@ public class DireccionService
         d.Estado = dto.Estado.Trim();
         d.CodigoPostal = dto.CodigoPostal.Trim();
         d.Referencias = string.IsNullOrWhiteSpace(dto.Referencias) ? null : dto.Referencias.Trim();
+        var conUbicacion = dto.Latitud.HasValue && dto.Longitud.HasValue;
+        d.Latitud = conUbicacion ? Math.Round(dto.Latitud!.Value, 6) : null;
+        d.Longitud = conUbicacion ? Math.Round(dto.Longitud!.Value, 6) : null;
     }
 }

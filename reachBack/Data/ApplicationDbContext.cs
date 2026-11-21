@@ -23,6 +23,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MetodoEnvio> MetodosEnvio => Set<MetodoEnvio>();
     public DbSet<Movimiento> MovimientosKardex => Set<Movimiento>();
     public DbSet<Notificacion> Notificaciones => Set<Notificacion>();
+    public DbSet<Sucursal> Sucursales => Set<Sucursal>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -111,6 +112,8 @@ public class ApplicationDbContext : DbContext
             e.Property(x => x.Estado).HasMaxLength(80).IsRequired();
             e.Property(x => x.CodigoPostal).HasMaxLength(5).IsRequired();
             e.Property(x => x.Referencias).HasMaxLength(250);
+            e.Property(x => x.Latitud).HasPrecision(9, 6);
+            e.Property(x => x.Longitud).HasPrecision(9, 6);
             e.HasOne(x => x.Usuario).WithMany(u => u.Direcciones).HasForeignKey(x => x.UsuarioId).OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -141,6 +144,9 @@ public class ApplicationDbContext : DbContext
             e.Property(x => x.TarjetaMarca).HasMaxLength(20);
             e.Property(x => x.TarjetaUltimos4).HasMaxLength(4);
             e.Property(x => x.Notas).HasMaxLength(500);
+            e.Property(x => x.EnvioLatitud).HasPrecision(9, 6);
+            e.Property(x => x.EnvioLongitud).HasPrecision(9, 6);
+            e.HasOne(x => x.Sucursal).WithMany().HasForeignKey(x => x.SucursalId).OnDelete(DeleteBehavior.Restrict);
             e.HasIndex(x => x.Folio).IsUnique();
             e.HasIndex(x => x.Fecha);
             e.HasOne(x => x.Usuario).WithMany(u => u.Pedidos).HasForeignKey(x => x.UsuarioId).OnDelete(DeleteBehavior.Restrict);
@@ -173,6 +179,18 @@ public class ApplicationDbContext : DbContext
             e.Property(x => x.AdministradorResponsable).HasMaxLength(160);
             e.HasIndex(x => x.Fecha);
             e.HasOne(x => x.Producto).WithMany().HasForeignKey(x => x.ProductoId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Sucursal>(e =>
+        {
+            e.ToTable("Sucursales");
+            e.Property(x => x.Nombre).HasMaxLength(120).IsRequired();
+            e.Property(x => x.Direccion).HasMaxLength(250).IsRequired();
+            e.Property(x => x.Ciudad).HasMaxLength(80).IsRequired();
+            e.Property(x => x.Telefono).HasMaxLength(20).IsRequired();
+            e.Property(x => x.Horario).HasMaxLength(120).IsRequired();
+            e.Property(x => x.Latitud).HasPrecision(9, 6);
+            e.Property(x => x.Longitud).HasPrecision(9, 6);
         });
 
         modelBuilder.Entity<Notificacion>(e =>

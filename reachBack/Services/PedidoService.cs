@@ -17,14 +17,16 @@ public class PedidoService
     private readonly TiendaOptions _tienda;
     private readonly ILogger<PedidoService> _logger;
     private readonly NotificacionService _notificaciones;
+    private readonly RastreoService _rastreo;
 
-    public PedidoService(ApplicationDbContext db, InventarioService inventario, IOptions<TiendaOptions> tienda, ILogger<PedidoService> logger, NotificacionService notificaciones)
+    public PedidoService(ApplicationDbContext db, InventarioService inventario, IOptions<TiendaOptions> tienda, ILogger<PedidoService> logger, NotificacionService notificaciones, RastreoService rastreo)
     {
         _db = db;
         _inventario = inventario;
         _tienda = tienda.Value;
         _logger = logger;
         _notificaciones = notificaciones;
+        _rastreo = rastreo;
     }
 
     public async Task<PedidoDetalleDto> CrearAsync(int usuarioId, CheckoutDto dto)
@@ -41,6 +43,15 @@ public class PedidoService
             if (!dto.DireccionId.HasValue) throw new AppException("Selecciona una dirección de envío.");
             direccion = await _db.Direcciones.FirstOrDefaultAsync(d => d.Id == dto.DireccionId.Value && d.UsuarioId == usuarioId)
                 ?? throw new AppException("La dirección seleccionada no es válida.");
+        }
+
+        Sucursal? sucursal = null;
+        if (!metodo.RequiereDireccion)
+        {
+            sucursal = dto.SucursalId.HasValue
+                ? await _db.Sucursales.FirstOrDefaultAsync(s => s.Id == dto.SucursalId.Value && s.Activa)
+                : await _db.Sucursales.Where(s => s.Activa).OrderBy(s => s.Id).FirstOrDefaultAsync();
+            if (sucursal is null) throw new AppException("Selecciona una sucursal para recoger tu pedido.");
         }
 
         var (marca, ultimos4) = ValidarPago(dto.Pago);
@@ -82,7 +93,6 @@ public class PedidoService
             EstadoArmado = ensambles > 0 ? EstadosPedido.ArmadoAtendido : EstadosPedido.ArmadoNoAplica,
             EstadoEnvio = EstadosPedido.EnvioPreparando,
             MetodoEnvioId = metodo.Id,
-            Paqueteria = metodo.RequiereDireccion ? metodo.Paqueteria : null,
             FechaEstimadaEntrega = ahora.AddDays(metodo.DiasMax + (ensambles > 0 ? 2 : 0)),
             EnvioNombreRecibe = direccion?.NombreRecibe ?? usuario.Nombre,
             EnvioTelefono = direccion?.Telefono ?? usuario.Telefono,
@@ -91,6 +101,10 @@ public class PedidoService
             EnvioEstado = direccion?.Estado,
             EnvioCodigoPostal = direccion?.CodigoPostal,
             EnvioReferencias = direccion?.Referencias,
+            EnvioLatitud = direccion?.Latitud,
+            EnvioLongitud = direccion?.Longitud,
+            SucursalId = sucursal?.Id,
+            Paqueteria = metodo.RequiereDireccion ? metodo.Paqueteria : sucursal?.Nombre,
             MetodoPago = "Tarjeta",
             TarjetaMarca = marca,
             TarjetaUltimos4 = ultimos4,
@@ -162,6 +176,7 @@ public class PedidoService
             .Include(x => x.Seguimiento)
             .Include(x => x.MetodoEnvio)
             .Include(x => x.Usuario)
+            .Include(x => x.Sucursal)
             .FirstOrDefaultAsync(x => x.Id == pedidoId && (esPersonal || x.UsuarioId == usuarioId))
             ?? throw AppException.NoEncontrado("Pedido no encontrado.");
         return Detalle(p);
@@ -365,7 +380,7 @@ public class PedidoService
         p.Detalles.OrderByDescending(d => d.PrecioUnitario).FirstOrDefault()?.ImagenUrl ?? string.Empty,
         p.Usuario?.Nombre ?? string.Empty);
 
-    private static PedidoDetalleDto Detalle(Pedido p) => new(
+    private PedidoDetalleDto Detalle(Pedido p) => new(
         p.Id,
         p.Folio,
         p.Fecha,
@@ -404,7 +419,9 @@ public class PedidoService
             .Select(d => new PedidoDetalleItemDto(d.ProductoId, d.Sku, d.NombreProducto, d.ImagenUrl, d.Cantidad, d.PrecioUnitario,
                 d.PrecioUnitario * d.Cantidad, d.EsEnsamble, d.EnsambleId, d.EnsambleNombre))
             .ToList(),
-        p.Seguimiento.OrderBy(s => s.Fecha).ThenBy(s => s.Id).Select(s => new SeguimientoDto(s.Titulo, s.Descripcion, s.Fecha)).ToList());
+        p.Seguimiento.OrderBy(s => s.Fecha).ThenBy(s => s.Id).Select(s => new SeguimientoDto(s.Titulo, s.Descripcion, s.Fecha)).ToList(),
+        p.Sucursal is null ? null : SucursalService.ADto(p.Sucursal),
+        _rastreo.Calcular(p));
 
     private static string FormatearDireccion(Direccion d)
     {
