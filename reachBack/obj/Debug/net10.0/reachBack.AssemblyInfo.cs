@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+de8a2b67e600dd2ff8a42e23539cb55f31eaab87")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72fab11c7b0e5df0fe67bc6e11f52f3493e4d696")]
 [assembly: System.Reflection.AssemblyProductAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("reachBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

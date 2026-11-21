@@ -62,7 +62,7 @@ public class ArmadoPc
 
 public class ConfiguradorService
 {
-    private record Conflicto(string Clave, string Mensaje);
+    internal record Conflicto(string Clave, string Mensaje);
 
     private static readonly Dictionary<string, (string Nombre, bool Obligatorio, bool Varios, string Ayuda)> InfoPasos = new()
     {
@@ -294,7 +294,7 @@ public class ConfiguradorService
         return componentes.Sum(c => Spec(c.Producto).ConsumoW ?? 0) + ConsumoBaseW;
     }
 
-    private static int FuenteRecomendada(ArmadoPc a)
+    internal static int FuenteRecomendada(ArmadoPc a)
     {
         var consumo = Consumo(a);
         if (consumo == 0) return 0;
@@ -303,7 +303,7 @@ public class ConfiguradorService
         return Math.Max(conMargen, gpu);
     }
 
-    private static List<Conflicto> Evaluar(ArmadoPc a)
+    internal static List<Conflicto> Evaluar(ArmadoPc a)
     {
         var lista = new List<Conflicto>();
         var cpu = Spec(a.Cpu);
